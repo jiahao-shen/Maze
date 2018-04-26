@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private var isStart = true
     private var flag = true
     private var level = 10
+    private var path = ArrayList<Int>()
+    private var time = 0L
 
     private lateinit var mapList: ArrayList<Data>
     private lateinit var mapAdapter: DataAdapter
@@ -52,12 +54,34 @@ class MainActivity : AppCompatActivity() {
             if (start == null || goal == null) {
                 toast("请先确定起点和终点!")
             } else {
+                clearPath()
                 flag = false
+                val t1 = System.currentTimeMillis()
                 val aStar = AStar(mapList, level)
-                val path = aStar.path
-                val time = aStar.runTime
-                showPath(path, time)
+                val t2 = System.currentTimeMillis()
+                path = aStar.path
+                time = t2 - t1
+                showPath()
             }
+        }
+
+        bfsButton.setOnClickListener {
+            if (start == null || goal == null) {
+                toast("请先确定起点和终点!")
+            } else {
+                clearPath()
+                flag = false
+                val t1 = System.currentTimeMillis()
+                val bfs = BFS(mapList, level)
+                val t2 = System.currentTimeMillis()
+                path = bfs.path
+                time = t2 - t1
+                showPath()
+            }
+        }
+
+        clearPathButton.setOnClickListener {
+            clearPath()
         }
 
         levelBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -69,15 +93,24 @@ class MainActivity : AppCompatActivity() {
 
             @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                level = progress / 5 + 10
+                level = progress / 2 + 10
                 levelText.text = "Level:$level"
             }
         })
 
     }
 
+    private fun clearPath() {
+        for ((index, item) in mapList.withIndex()) {
+            if (item.type == Type.PATH) {
+                item.type = Type.EMPTY
+                mapAdapter.notifyItemChanged(index)
+            }
+        }
+    }
+
     @SuppressLint("SetTextI18n")
-    private fun showPath(path: ArrayList<Int>, time: Long) {
+    private fun showPath() {
         timeView.text = "Time:${time}ms"
         if (path.size == 0) {
             toast("不存在路径!")
@@ -101,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 mapList[index].type = Type.PATH
-                mapAdapter.notifyDataSetChanged()
+                mapAdapter.notifyItemChanged(index)
             }
         }
 
@@ -110,12 +143,14 @@ class MainActivity : AppCompatActivity() {
     private fun initMap() {
         flag = true
         isStart = true
+        start = null
+        goal = null
         mapList = ArrayList()
         for (i in 0 until level * level) {
             val random = Random()
-            when (random.nextInt(4)) {
-                0, 1, 2 -> mapList.add(Data(Type.EMPTY))
-                3 -> mapList.add(Data(Type.WALL))
+            when (random.nextInt(10)) {
+                0, 1, 2, 3, 4, 5, 9 -> mapList.add(Data(Type.EMPTY))
+                6, 7, 8 -> mapList.add(Data(Type.WALL))
             }
         }
         mapAdapter = DataAdapter(mapList, SizeUtils.dp2px(700 - level * 2f) / level)

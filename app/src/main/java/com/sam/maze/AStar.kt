@@ -30,7 +30,7 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
         return false
     }
 
-    private val maze = Array(level, { Array(level) { _ -> Type.EMPTY }} )
+    private val maze = Array(level, { Array(level) { _ -> Type.EMPTY }})
 
     private val direction = arrayOf(     //上下左右
             intArrayOf(-1, 0),
@@ -45,17 +45,19 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
     private val openSet = PriorityQueue<Node>()
     private val closedSet = PriorityQueue<Node>()
 
+    private val openVisited = Array(level, { Array<Node?>(level) { _ -> null }})
+    private val closedVisited = Array(level, { Array<Node?>(level) { _ -> null }})
+
     val path = ArrayList<Int>()
-    var runTime = 0L
 
     init {
         for ((index, value) in list.withIndex()) {
             maze[index / level][index % level] = value.type
         }
-        sovlePath()
+        solvePath()
     }
 
-    private fun sovlePath() {
+    private fun solvePath() {
         for (i in 0 until level) {
             for (j in 0 until level) {
                 if (maze[i][j] == Type.START) {
@@ -69,7 +71,6 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
         start.calculate(goal)       //计算起点的value
         openSet.add(start)          //添加到openSet
 
-        val startTime = System.currentTimeMillis()
         while (!openSet.isEmpty()) {        //openSet非空
             val minNode = openSet.poll()        //取出头节点
             if (isEqual(minNode, goal)) {       //终点则break
@@ -87,42 +88,39 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
                     var flag1 = false
                     var flag2 = false
 
-                    for (item in openSet) {
-                        if (isEqual(node, item)) {      //存在在openSet中
-                            flag1 = true
-                            if (node.value < item.value) {      //新的节点值更小
-                                openSet.remove(item)        //从openSet中移除原有的节点
-                                node.father = minNode       //设置父节点
-                                openSet.add(node)           //放入openSet
-                            }
-                            break
+                    if (openVisited[x][y] != null) {
+                        flag1 = true
+                        if (node.value < openVisited[x][y]!!.value) {
+                            openSet.remove(openVisited[x][y])
+                            node.father = minNode
+                            openSet.add(node)
+                            openVisited[x][y] = node
                         }
                     }
 
                     if (!flag1) {           //不再openSet中
-                        for (item in closedSet) {
-                            if (isEqual(node, item)) {      //存在closedSet中
-                                flag2 = true
-                                break
-                            }
+                        if (closedVisited[x][y] != null) {
+                            flag2 = true
                         }
                     }
+
                     if (!flag1 && !flag2) {     //两个表都不在
                         node.father = minNode       //设置父节点
                         openSet.add(node)           //加入openSet
+                        openVisited[x][y] = node
                     }
                 }
             }
             closedSet.add(minNode)      //放入closedSet
+            closedVisited[minNode.x][minNode.y] = minNode
         }
-        val endTime = System.currentTimeMillis()
 
         var node = goal     //从终点开始回溯
         while (true) {
             if (node.father != null) {
-                for (j in 0..3) {
-                    if (node.father!!.x + direction[j][0] == node.x && node.father!!.y + direction[j][1] == node.y) {
-                        path.add(j)
+                for (i in 0..3) {
+                    if (node.father!!.x + direction[i][0] == node.x && node.father!!.y + direction[i][1] == node.y) {
+                        path.add(i)
                         break
                     }
                 }
@@ -132,7 +130,6 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
             }
         }
         path.reverse()      //路径逆序
-        runTime = endTime - startTime
     }
 
 }

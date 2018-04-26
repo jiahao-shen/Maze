@@ -19,22 +19,22 @@
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/initButton"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="打乱"
         app:bootstrapBrand="primary"
         app:bootstrapSize="xl"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/mapView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499"
+        app:layout_constraintVertical_bias="0.468"
         app:roundedCorners="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/startButton"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="起点"
         app:roundedCorners="true"
@@ -49,7 +49,7 @@
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/goalButton"
         app:roundedCorners="true"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="@+id/initButton"
         app:layout_constraintRight_toRightOf="@+id/initButton"
@@ -58,6 +58,19 @@
         android:text="终点"
         app:bootstrapSize="xl"
         app:bootstrapBrand="success" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/clearPathButton"
+        app:roundedCorners="true"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/goalButton"
+        app:layout_constraintRight_toRightOf="@+id/goalButton"
+        app:layout_constraintTop_toBottomOf="@+id/goalButton"
+        android:layout_marginTop="20dp"
+        android:text="清除路径"
+        app:bootstrapSize="xl"
+        app:bootstrapBrand="info" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/aStarButton"
@@ -69,11 +82,12 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/initButton"
         app:layout_constraintBottom_toBottomOf="@+id/initButton"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/timeView"
+        android:text="Time:0ms"
         app:layout_constraintLeft_toRightOf="@+id/mapView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/aStarButton"
@@ -85,6 +99,7 @@
 
     <TextView
         android:id="@+id/stepsView"
+        android:text="Steps:0"
         app:layout_constraintLeft_toRightOf="@+id/mapView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/timeView"
@@ -114,5 +129,20 @@
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/bfsButton"
+        android:text="BFS"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="xl"
+        app:roundedCorners="true"
+        app:layout_constraintLeft_toLeftOf="@+id/aStarButton"
+        app:layout_constraintRight_toRightOf="@+id/aStarButton"
+        app:layout_constraintTop_toBottomOf="@+id/aStarButton"
+        android:layout_marginTop="20dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+
+
 
 </android.support.constraint.ConstraintLayout>
