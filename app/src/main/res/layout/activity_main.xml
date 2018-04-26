@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bootstrap_gray_lighter"
+    tools:context="com.sam.maze.MainActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mapView"
+        android:layout_width="700dp"
+        android:layout_height="700dp"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/initButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="打乱"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="xl"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/mapView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"
+        app:roundedCorners="true" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/startButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="起点"
+        app:roundedCorners="true"
+        app:layout_constraintLeft_toLeftOf="@+id/initButton"
+        app:layout_constraintRight_toRightOf="@+id/initButton"
+        app:layout_constraintTop_toBottomOf="@+id/initButton"
+        android:layout_marginTop="20dp"
+        app:bootstrapBrand="danger"
+        app:bootstrapSize="xl" />
+
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/goalButton"
+        app:roundedCorners="true"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/initButton"
+        app:layout_constraintRight_toRightOf="@+id/initButton"
+        app:layout_constraintTop_toBottomOf="@+id/startButton"
+        android:layout_marginTop="20dp"
+        android:text="终点"
+        app:bootstrapSize="xl"
+        app:bootstrapBrand="success" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/aStarButton"
+        android:text="A*"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="xl"
+        app:roundedCorners="true"
+        app:layout_constraintLeft_toRightOf="@+id/mapView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/initButton"
+        app:layout_constraintBottom_toBottomOf="@+id/initButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/timeView"
+        app:layout_constraintLeft_toRightOf="@+id/mapView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/aStarButton"
+        android:layout_marginBottom="20dp"
+        android:textSize="30sp"
+        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/stepsView"
+        app:layout_constraintLeft_toRightOf="@+id/mapView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/timeView"
+        android:layout_marginBottom="20dp"
+        android:textSize="30sp"
+        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:id="@+id/levelBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/mapView"
+        app:layout_constraintBottom_toTopOf="@+id/initButton"
+        android:layout_marginBottom="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textSize="40sp"
+        android:id="@+id/levelText"
+        android:text="Level:10"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintLeft_toLeftOf="@+id/levelBar"
+        app:layout_constraintRight_toRightOf="@+id/levelBar"
+        app:layout_constraintBottom_toTopOf="@+id/levelBar"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</android.support.constraint.ConstraintLayout>
