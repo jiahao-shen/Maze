@@ -1,11 +1,9 @@
-package com.sam.maze
+package com.sam.maze.custom
 
-import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.orhanobut.logger.Logger
+import com.sam.maze.R
 
 /**
  * Created by sam on 2018/4/26.

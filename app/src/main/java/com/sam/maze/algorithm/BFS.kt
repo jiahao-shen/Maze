@@ -1,6 +1,7 @@
-package com.sam.maze
+package com.sam.maze.algorithm
 
-import com.orhanobut.logger.Logger
+import com.sam.maze.custom.Data
+import com.sam.maze.custom.Type
 import java.util.*
 
 class BFS(list: ArrayList<Data>, private val level: Int) {

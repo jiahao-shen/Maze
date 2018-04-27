@@ -11,6 +11,11 @@ import com.blankj.utilcode.util.Utils
 import com.gyf.barlibrary.ImmersionBar
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.sam.maze.algorithm.AStar
+import com.sam.maze.algorithm.BFS
+import com.sam.maze.custom.Data
+import com.sam.maze.custom.DataAdapter
+import com.sam.maze.custom.Type
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 import java.util.*
@@ -56,9 +61,9 @@ class MainActivity : AppCompatActivity() {
             } else {
                 clearPath()
                 flag = false
-                val t1 = System.currentTimeMillis()
+                val t1 = System.nanoTime()
                 val aStar = AStar(mapList, level)
-                val t2 = System.currentTimeMillis()
+                val t2 = System.nanoTime()
                 path = aStar.path
                 time = t2 - t1
                 showPath()
@@ -71,9 +76,9 @@ class MainActivity : AppCompatActivity() {
             } else {
                 clearPath()
                 flag = false
-                val t1 = System.currentTimeMillis()
+                val t1 = System.nanoTime()
                 val bfs = BFS(mapList, level)
-                val t2 = System.currentTimeMillis()
+                val t2 = System.nanoTime()
                 path = bfs.path
                 time = t2 - t1
                 showPath()
@@ -111,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showPath() {
-        timeView.text = "Time:${time}ms"
+        timeView.text = "Time:${time}ns"
         if (path.size == 0) {
             toast("不存在路径!")
             stepsView.text = "Steps:+∞"
@@ -149,36 +154,30 @@ class MainActivity : AppCompatActivity() {
         for (i in 0 until level * level) {
             val random = Random()
             when (random.nextInt(10)) {
-                0, 1, 2, 3, 4, 5, 9 -> mapList.add(Data(Type.EMPTY))
-                6, 7, 8 -> mapList.add(Data(Type.WALL))
+                0, 1, 2, 3, 4, 5, 6 -> mapList.add(Data(Type.EMPTY))
+                7, 8, 9 -> mapList.add(Data(Type.WALL))
             }
         }
         mapAdapter = DataAdapter(mapList, SizeUtils.dp2px(700 - level * 2f) / level)
         mapLayoutManager = GridLayoutManager(this, level)
-        mapView.layoutManager = mapLayoutManager as RecyclerView.LayoutManager?
+        mapView.layoutManager = mapLayoutManager
         mapView.adapter = mapAdapter
         mapAdapter.setOnItemClickListener { adapter, _, position ->
             if (flag) {
-                val item = adapter.getItem(position) as Data
-                if (item.type == Type.EMPTY) {
-                    if (isStart) {
+                val item = adapter.getItem(position) as Data    //获取当前点击对象
+                if (item.type == Type.EMPTY) {      //如果是空
+                    if (isStart) {      //并且是确定起点
+                        mapAdapter.notifyItemChanged(mapList.indexOf(start))
                         item.type = Type.START
-                        if (start == null) {
-                            start = item
-                        } else {
-                            start!!.type = Type.EMPTY
-                            start = item
-                        }
+                        start?.type = Type.EMPTY
+                        start = item
                     } else {
+                        mapAdapter.notifyItemChanged(mapList.indexOf(goal))
                         item.type = Type.GOAL
-                        if (goal == null) {
-                            goal = item
-                        } else {
-                            goal!!.type = Type.EMPTY
-                            goal = item
-                        }
+                        goal?.type = Type.EMPTY
+                        goal = item
                     }
-                    mapAdapter.notifyDataSetChanged()
+                    mapAdapter.notifyItemChanged(mapList.indexOf(item))
                 }
             }
         }

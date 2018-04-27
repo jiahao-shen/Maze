@@ -1,6 +1,7 @@
-package com.sam.maze
+package com.sam.maze.algorithm
 
-import com.orhanobut.logger.Logger
+import com.sam.maze.custom.Data
+import com.sam.maze.custom.Type
 import java.util.*
 
 /**
@@ -30,6 +31,15 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
         return false
     }
 
+    enum class Status {     //判断节点状态
+        UN_VISITED, IN_OPEN, IN_CLOSED
+    }
+
+    class Flag {        //存储节点状态和地址
+        var status = Status.UN_VISITED
+        var node: Node? = null
+    }
+
     private val maze = Array(level, { Array(level) { _ -> Type.EMPTY }})
 
     private val direction = arrayOf(     //上下左右
@@ -45,8 +55,7 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
     private val openSet = PriorityQueue<Node>()
     private val closedSet = PriorityQueue<Node>()
 
-    private val openVisited = Array(level, { Array<Node?>(level) { _ -> null }})
-    private val closedVisited = Array(level, { Array<Node?>(level) { _ -> null }})
+    private val flagList = Array(level, { Array(level) { _ -> Flag() }})
 
     val path = ArrayList<Int>()
 
@@ -85,34 +94,29 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
                     node.depth = minNode.depth + 1
                     node.calculate(goal)
 
-                    var flag1 = false
-                    var flag2 = false
-
-                    if (openVisited[x][y] != null) {
-                        flag1 = true
-                        if (node.value < openVisited[x][y]!!.value) {
-                            openSet.remove(openVisited[x][y])
+                    when (flagList[x][y].status) {
+                        AStar.Status.UN_VISITED -> {        //没有访问过
                             node.father = minNode
                             openSet.add(node)
-                            openVisited[x][y] = node
+                            flagList[x][y].status = Status.IN_OPEN
+                            flagList[x][y].node = node
                         }
+                        AStar.Status.IN_OPEN -> {       //在openSet中
+                            if (node.value < flagList[x][y].node!!.value) {
+                                openSet.remove(flagList[x][y].node)
+                                node.father = minNode
+                                openSet.add(node)
+                                flagList[x][y].node = node
+                            }
+                        }
+                        AStar.Status.IN_CLOSED -> {  }      //在closedSet中
                     }
 
-                    if (!flag1) {           //不再openSet中
-                        if (closedVisited[x][y] != null) {
-                            flag2 = true
-                        }
-                    }
-
-                    if (!flag1 && !flag2) {     //两个表都不在
-                        node.father = minNode       //设置父节点
-                        openSet.add(node)           //加入openSet
-                        openVisited[x][y] = node
-                    }
                 }
             }
             closedSet.add(minNode)      //放入closedSet
-            closedVisited[minNode.x][minNode.y] = minNode
+            flagList[minNode.x][minNode.y].status = Status.IN_CLOSED
+            flagList[minNode.x][minNode.y].node = minNode
         }
 
         var node = goal     //从终点开始回溯
