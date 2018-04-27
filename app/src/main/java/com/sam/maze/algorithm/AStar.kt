@@ -42,11 +42,11 @@ class AStar(list: ArrayList<Data>, private var level: Int) {
 
     private val maze = Array(level, { Array(level) { _ -> Type.EMPTY }})
 
-    private val direction = arrayOf(     //上下左右
+    private val direction = arrayOf(     //上左右下
             intArrayOf(-1, 0),
-            intArrayOf(1, 0),
             intArrayOf(0, -1),
-            intArrayOf(0, 1)
+            intArrayOf(0, 1),
+            intArrayOf(1, 0)
     )
 
     private lateinit var start: Node

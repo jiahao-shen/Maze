@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.widget.SeekBar
+import android.view.View
 import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.Utils
 import com.gyf.barlibrary.ImmersionBar
@@ -13,9 +12,12 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.sam.maze.algorithm.AStar
 import com.sam.maze.algorithm.BFS
+import com.sam.maze.algorithm.IDAStar
 import com.sam.maze.custom.Data
 import com.sam.maze.custom.DataAdapter
+import com.sam.maze.custom.Method
 import com.sam.maze.custom.Type
+import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 import java.util.*
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var level = 10
     private var path = ArrayList<Int>()
     private var time = 0L
+    private var solveThread: Thread? = null
 
     private lateinit var mapList: ArrayList<Data>
     private lateinit var mapAdapter: DataAdapter
@@ -56,53 +59,86 @@ class MainActivity : AppCompatActivity() {
         }
 
         aStarButton.setOnClickListener {
-            if (start == null || goal == null) {
-                toast("请先确定起点和终点!")
-            } else {
-                clearPath()
-                flag = false
-                val t1 = System.nanoTime()
-                val aStar = AStar(mapList, level)
-                val t2 = System.nanoTime()
-                path = aStar.path
-                time = t2 - t1
-                showPath()
-            }
+            solve(Method.ASTAR)
         }
 
         bfsButton.setOnClickListener {
-            if (start == null || goal == null) {
-                toast("请先确定起点和终点!")
-            } else {
-                clearPath()
-                flag = false
-                val t1 = System.nanoTime()
-                val bfs = BFS(mapList, level)
-                val t2 = System.nanoTime()
-                path = bfs.path
-                time = t2 - t1
-                showPath()
-            }
+            solve(Method.BFS)
+        }
+
+        idaStarButton.setOnClickListener {
+            solve(Method.IDASTAR)
         }
 
         clearPathButton.setOnClickListener {
             clearPath()
         }
 
-        levelBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        levelBar.onProgressChangedListener = object : BubbleSeekBar.OnProgressChangedListener {
+            override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {
                 initMap()
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+            }
 
             @SuppressLint("SetTextI18n")
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                level = progress / 2 + 10
+            override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+                level = progress
                 levelText.text = "Level:$level"
             }
-        })
 
+        }
+
+        stopButton.setOnClickListener {
+            solveThread?.interrupt()
+            progressBar.visibility = View.INVISIBLE
+        }
+
+    }
+
+    private fun solve(method: Method) {
+        if (start == null || goal == null) {
+            toast("请先确定起点和终点!")
+        } else {
+            clearPath()
+            flag = false
+            solveThread = Thread(Runnable {
+                if (!hasPath()) {
+                    toast("不存在路径")
+                } else {
+                    runOnUiThread {
+                        progressBar.visibility = View.VISIBLE
+                    }
+                    val t1 = System.currentTimeMillis()
+                    path = when (method) {
+                        Method.ASTAR -> {
+                            val aStar = AStar(mapList, level)
+                            aStar.path
+                        }
+                        Method.BFS -> {
+                            val bfs = BFS(mapList, level)
+                            bfs.path
+                        }
+                        Method.IDASTAR -> {
+                            val idaStar = IDAStar(mapList, level)
+                            idaStar.path
+                        }
+                    }
+                    val t2 = System.currentTimeMillis()
+                    time = t2 - t1
+                    showPath()
+                }
+            })
+            solveThread?.start()
+        }
+    }
+
+    private fun hasPath(): Boolean {
+        val aStar = AStar(mapList, level)
+        if (aStar.path.size == 0)
+            return false
+        return true
     }
 
     private fun clearPath() {
@@ -116,31 +152,29 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showPath() {
-        timeView.text = "Time:${time}ns"
-        if (path.size == 0) {
-            toast("不存在路径!")
-            stepsView.text = "Steps:+∞"
-        } else {
+        runOnUiThread {
+            timeView.text = "Time:${time}ms"
             stepsView.text = "Steps:${path.size}"
             var index = mapList.indexOf(start)
-            for (i in 0 until (path.size - 1)) {
+            for (i in 0 until (path.size - 1)) {        //上左右下
                 when (path[i]) {
                     0 -> {
                         index -= level
                     }
                     1 -> {
-                        index += level
-                    }
-                    2 -> {
                         index--
                     }
-                    3 -> {
+                    2 -> {
                         index++
+                    }
+                    3 -> {
+                        index += level
                     }
                 }
                 mapList[index].type = Type.PATH
                 mapAdapter.notifyItemChanged(index)
             }
+            progressBar.visibility = View.INVISIBLE
         }
 
     }

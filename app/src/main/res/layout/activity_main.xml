@@ -25,124 +25,165 @@
         app:bootstrapBrand="primary"
         app:bootstrapSize="xl"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/mapView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.468"
+        app:layout_constraintVertical_bias="0.407"
         app:roundedCorners="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/startButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="起点"
-        app:roundedCorners="true"
+        app:bootstrapBrand="danger"
+        app:bootstrapSize="xl"
         app:layout_constraintLeft_toLeftOf="@+id/initButton"
         app:layout_constraintRight_toRightOf="@+id/initButton"
         app:layout_constraintTop_toBottomOf="@+id/initButton"
-        android:layout_marginTop="20dp"
-        app:bootstrapBrand="danger"
-        app:bootstrapSize="xl" />
+        app:roundedCorners="true" />
 
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/goalButton"
-        app:roundedCorners="true"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="终点"
+        app:bootstrapBrand="success"
+        app:bootstrapSize="xl"
         app:layout_constraintLeft_toLeftOf="@+id/initButton"
         app:layout_constraintRight_toRightOf="@+id/initButton"
         app:layout_constraintTop_toBottomOf="@+id/startButton"
-        android:layout_marginTop="20dp"
-        android:text="终点"
-        app:bootstrapSize="xl"
-        app:bootstrapBrand="success" />
+        app:roundedCorners="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/clearPathButton"
-        app:roundedCorners="true"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="清除路径"
+        app:bootstrapBrand="info"
+        app:bootstrapSize="xl"
         app:layout_constraintLeft_toLeftOf="@+id/goalButton"
         app:layout_constraintRight_toRightOf="@+id/goalButton"
         app:layout_constraintTop_toBottomOf="@+id/goalButton"
-        android:layout_marginTop="20dp"
-        android:text="清除路径"
-        app:bootstrapSize="xl"
-        app:bootstrapBrand="info" />
+        app:roundedCorners="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/aStarButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:text="A*"
-        app:bootstrapBrand="primary"
+        app:bootstrapBrand="danger"
         app:bootstrapSize="xl"
-        app:roundedCorners="true"
+        app:layout_constraintBottom_toBottomOf="@+id/goalButton"
         app:layout_constraintLeft_toRightOf="@+id/mapView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/initButton"
-        app:layout_constraintBottom_toBottomOf="@+id/initButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content" />
+        app:roundedCorners="true" />
 
     <TextView
         android:id="@+id/timeView"
-        android:text="Time:0ms"
-        app:layout_constraintLeft_toRightOf="@+id/mapView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/aStarButton"
-        android:layout_marginBottom="20dp"
-        android:textSize="30sp"
-        android:textColor="@color/colorBlack"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Time:0ms"
+        android:textColor="@color/colorBlack"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/aStarButton"
+        app:layout_constraintLeft_toRightOf="@+id/mapView"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/stepsView"
-        android:text="Steps:0"
-        app:layout_constraintLeft_toRightOf="@+id/mapView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/timeView"
-        android:layout_marginBottom="20dp"
-        android:textSize="30sp"
-        android:textColor="@color/colorBlack"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Steps:0"
+        android:textColor="@color/colorBlack"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/timeView"
+        app:layout_constraintLeft_toRightOf="@+id/mapView"
+        app:layout_constraintRight_toRightOf="parent" />
 
-    <SeekBar
+    <com.xw.repo.BubbleSeekBar
         android:id="@+id/levelBar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/mapView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:bsb_hide_bubble="true"
+        app:bsb_max="50"
+        app:bsb_min="10"
+        app:bsb_progress="10"
+        app:bsb_second_track_color="@color/bootstrap_brand_success"
+        app:bsb_section_count="5"
+        app:layout_constraintLeft_toLeftOf="@+id/initButton"
+        app:layout_constraintRight_toRightOf="@+id/initButton"
         app:layout_constraintBottom_toTopOf="@+id/initButton"
         android:layout_marginBottom="20dp"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content" />
+        app:bsb_track_color="@color/bootstrap_gray_light"/>
 
     <TextView
-        android:textSize="40sp"
         android:id="@+id/levelText"
-        android:text="Level:10"
-        android:textColor="@color/colorBlack"
-        app:layout_constraintLeft_toLeftOf="@+id/levelBar"
-        app:layout_constraintRight_toRightOf="@+id/levelBar"
-        app:layout_constraintBottom_toTopOf="@+id/levelBar"
-        android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Level:10"
+        app:layout_constraintLeft_toLeftOf="@id/levelBar"
+        app:layout_constraintRight_toRightOf="@id/levelBar"
+        app:layout_constraintBottom_toTopOf="@id/levelBar"
+        android:textColor="@color/colorBlack"
+        android:textSize="40sp" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/bfsButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="BFS"
-        app:bootstrapBrand="primary"
+        app:bootstrapBrand="success"
         app:bootstrapSize="xl"
-        app:roundedCorners="true"
         app:layout_constraintLeft_toLeftOf="@+id/aStarButton"
         app:layout_constraintRight_toRightOf="@+id/aStarButton"
         app:layout_constraintTop_toBottomOf="@+id/aStarButton"
-        android:layout_marginTop="20dp"
+        app:roundedCorners="true" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/idaStarButton"
         android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="IDAStar"
+        app:bootstrapBrand="info"
+        app:bootstrapSize="xl"
+        app:layout_constraintLeft_toLeftOf="@+id/bfsButton"
+        app:layout_constraintRight_toRightOf="@+id/bfsButton"
+        app:layout_constraintTop_toBottomOf="@+id/bfsButton"
+        app:roundedCorners="true" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="@id/stepsView"
+        app:layout_constraintRight_toRightOf="@id/stepsView"
+        app:layout_constraintBottom_toTopOf="@id/stepsView"
+        android:layout_marginBottom="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="150dp"
+        android:id="@+id/stopButton"
+        android:text="暂停"
+        app:bootstrapBrand="warning"
+        app:roundedCorners="true"
+        app:bootstrapSize="xl"
+        app:layout_constraintLeft_toLeftOf="@id/clearPathButton"
+        app:layout_constraintRight_toRightOf="@id/clearPathButton"
+        app:layout_constraintTop_toBottomOf="@id/clearPathButton"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content" />
-
-
 
 </android.support.constraint.ConstraintLayout>

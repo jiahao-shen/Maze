@@ -11,20 +11,16 @@ class BFS(list: ArrayList<Data>, private val level: Int) {
 
     }
 
-    private fun isEqual(a: Node, b: Node): Boolean {
-        if (a.x == b.x && a.y == b.y)
-            return true
-        return false
-    }
+    private fun isEqual(a: Node, b: Node) = a.x == b.x && a.y == b.y
 
     private val maze = Array(level, { Array(level) { _ -> Type.EMPTY }})
     private val visited = Array(level, { Array(level) { _ -> false }})
 
-    private val direction = arrayOf(     //上下左右
+    private val direction = arrayOf(     //上左右下
             intArrayOf(-1, 0),
-            intArrayOf(1, 0),
             intArrayOf(0, -1),
-            intArrayOf(0, 1)
+            intArrayOf(0, 1),
+            intArrayOf(1, 0)
     )
 
     private lateinit var start: Node
