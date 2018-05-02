@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.Utils
 import com.gyf.barlibrary.ImmersionBar
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.sam.maze.MainActivity.Status.*
 import com.sam.maze.algorithm.AStar
 import com.sam.maze.algorithm.BFS
 import com.sam.maze.algorithm.IDAStar
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private var start: Data? = null
     private var goal: Data? = null
-    private var isStart = true
+    private var status = EMPTY
     private var flag = true
     private var level = 10
     private var path = ArrayList<Int>()
@@ -36,6 +37,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mapList: ArrayList<Data>
     private lateinit var mapAdapter: DataAdapter
     private lateinit var mapLayoutManager: GridLayoutManager
+
+    enum class Status {
+        WALL, EMPTY, START, FINAL
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,12 +55,20 @@ class MainActivity : AppCompatActivity() {
             initMap()
         }
 
+        emptyButton.setOnClickListener {
+            status = EMPTY
+        }
+
+        wallButton.setOnClickListener {
+            status = WALL
+        }
+
         startButton.setOnClickListener {
-            isStart = true
+            status = START
         }
 
         goalButton.setOnClickListener {
-            isStart = false
+            status = FINAL
         }
 
         aStarButton.setOnClickListener {
@@ -181,7 +194,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initMap() {
         flag = true
-        isStart = true
+        status = EMPTY
         start = null
         goal = null
         mapList = ArrayList()
@@ -199,20 +212,27 @@ class MainActivity : AppCompatActivity() {
         mapAdapter.setOnItemClickListener { adapter, _, position ->
             if (flag) {
                 val item = adapter.getItem(position) as Data    //获取当前点击对象
-                if (item.type == Type.EMPTY) {      //如果是空
-                    if (isStart) {      //并且是确定起点
+                when(status) {
+                    START -> {      //并且是确定起点
                         mapAdapter.notifyItemChanged(mapList.indexOf(start))
                         item.type = Type.START
                         start?.type = Type.EMPTY
                         start = item
-                    } else {
+                    }
+                    FINAL ->{
                         mapAdapter.notifyItemChanged(mapList.indexOf(goal))
                         item.type = Type.GOAL
                         goal?.type = Type.EMPTY
                         goal = item
                     }
-                    mapAdapter.notifyItemChanged(mapList.indexOf(item))
+                    WALL -> {
+                        item.type = Type.WALL
+                    }
+                    EMPTY -> {
+                        item.type = Type.EMPTY
+                    }
                 }
+                mapAdapter.notifyDataSetChanged()
             }
         }
     }

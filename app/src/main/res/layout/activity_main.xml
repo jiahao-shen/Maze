@@ -25,12 +25,37 @@
         app:bootstrapBrand="primary"
         app:bootstrapSize="xl"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.471"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/mapView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.407"
+        app:layout_constraintVertical_bias="0.275"
         app:roundedCorners="true" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/emptyButton"
+        app:layout_constraintLeft_toLeftOf="@id/initButton"
+        app:layout_constraintRight_toRightOf="@id/initButton"
+        app:layout_constraintTop_toBottomOf="@id/initButton"
+        android:text="空白"
+        app:roundedCorners="true"
+        app:bootstrapBrand="secondary"
+        app:bootstrapSize="xl"
+        android:layout_marginTop="20dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/wallButton"
+        android:layout_width="150dp"
+        android:text="墙"
+        app:layout_constraintLeft_toLeftOf="@id/emptyButton"
+        app:layout_constraintRight_toRightOf="@id/emptyButton"
+        app:layout_constraintTop_toBottomOf="@id/emptyButton"
+        android:layout_marginTop="20dp"
+        app:bootstrapSize="xl"
+        app:roundedCorners="true"
+        android:layout_height="wrap_content" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/startButton"
@@ -40,9 +65,9 @@
         android:text="起点"
         app:bootstrapBrand="danger"
         app:bootstrapSize="xl"
-        app:layout_constraintLeft_toLeftOf="@+id/initButton"
-        app:layout_constraintRight_toRightOf="@+id/initButton"
-        app:layout_constraintTop_toBottomOf="@+id/initButton"
+        app:layout_constraintLeft_toLeftOf="@+id/wallButton"
+        app:layout_constraintRight_toRightOf="@+id/wallButton"
+        app:layout_constraintTop_toBottomOf="@+id/wallButton"
         app:roundedCorners="true" />
 
 
