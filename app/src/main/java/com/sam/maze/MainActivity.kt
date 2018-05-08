@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initMap() {
         flag = true
-        status = EMPTY
+        status = START
         start = null
         goal = null
         mapList = ArrayList()
